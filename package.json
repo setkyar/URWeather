@@ -7,8 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "moment": "^2.22.1",
+    "rabbit-node": "^1.0.4",
     "react": "16.3.1",
     "react-native": "0.55.3",
+    "react-native-linear-gradient": "^2.4.0",
+    "react-native-splash-screen": "3.0.6",
     "react-native-vector-icons": "^4.6.0"
   },
   "devDependencies": {
@@ -19,5 +23,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
   }
 }
