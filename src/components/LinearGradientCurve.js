@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import LinearGradient from "react-native-linear-gradient";
-import Icon from "react-native-vector-icons/Ionicons";
+import React, { Component } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class LinearGradientCurve extends Component {
   render() {
@@ -19,7 +19,7 @@ export default class LinearGradientCurve extends Component {
           <Icon
             name={iconName}
             size={65}
-            color="#fff"
+            color='#fff'
             style={shadowStyle}
           />
         ) : null}

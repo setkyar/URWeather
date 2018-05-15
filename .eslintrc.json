@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "react",
+    "react-native"
+  ],
+  "rules": {
+    "no-console": 0,
+    "camelcase": 0
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "URWeather",
+  "name": "ur-weather",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -18,6 +18,10 @@
   "devDependencies": {
     "babel-jest": "22.4.3",
     "babel-preset-react-native": "4.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-react-native": "^3.2.1",
     "jest": "22.4.3",
     "react-test-renderer": "16.3.1"
   },

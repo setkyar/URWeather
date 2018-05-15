@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,39 +6,41 @@ import {
   StatusBar,
   ImageBackground,
   ActivityIndicator
-} from "react-native";
+} from 'react-native';
 import Rabbit from 'rabbit-node';
-import moment from "moment/min/moment-with-locales";
+import moment from 'moment/min/moment-with-locales';
 import SplashScreen from 'react-native-splash-screen';
 
-import fetchWeather from "./utils/weatherApi";
-import IconList, { WeatherStatusList } from "./utils/Helpers";
-import LinearGradientCurve from "./components/LinearGradientCurve";
+import fetchWeather from './utils/weatherApi';
+import IconList, { WeatherStatusList } from './utils/Helpers';
+import LinearGradientCurve from './components/LinearGradientCurve';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       temp: 0,
-      weather: "Default",
+      weather: 'Default',
       currentCity: null,
-      message: null
+      message: null,
     };
   }
 
   componentDidMount() {
     // this.loadPosition();
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       this.loadPosition();
     }
     SplashScreen.hide();
   }
   
-  getCurrentPosition = (options) => new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  });
+  getCurrentPosition (options) {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
+  } 
 
-  getWeatherData = async (latitude, longitude) => {
+  async getWeatherData (latitude, longitude) {
     try {
       return await fetchWeather(latitude, longitude);
     } catch (error) {
@@ -46,7 +48,7 @@ export default class App extends Component {
     }
   }
 
-  loadPosition = async () => {
+  async loadPosition () {
     try {
       const position = await this.getCurrentPosition();
       console.log(position);
@@ -65,7 +67,7 @@ export default class App extends Component {
       });
       console.log(error);
     }
-  };
+  }
 
   render() {
     const temp = this.state.temp;
@@ -73,9 +75,9 @@ export default class App extends Component {
 
     if(weather === 'Default') {
       return(
-        <View style={[styles.container, styles.horizontal, { backgroundColor: "#222" }]}>
+        <View style={[styles.container, styles.horizontal, { backgroundColor: '#222' }]}>
           <StatusBar hidden />
-          <ActivityIndicator size="large" color="#b53ba4" />
+          <ActivityIndicator size='large' color='#b53ba4' />
           <Text style={styles.errorMessage}>{this.state.message ? Rabbit.uni2zg(this.state.message) : null}</Text>
         </View>
       )
@@ -87,7 +89,7 @@ export default class App extends Component {
     } = WeatherStatusList[weather];
 
     return (
-      <View style={[styles.container, { backgroundColor: "white" }]}>
+      <View style={[styles.container, { backgroundColor: 'white' }]}>
         <StatusBar hidden />
         <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
           <View style={styles.header}>
@@ -96,7 +98,7 @@ export default class App extends Component {
                 gradientFirstColor={gradientFirstColor}
                 gradientSecondColor={gradientSecondColor}
                 weatherStatusStyle={styles.weatherStatus}
-                height="100%"
+                height='100%'
                 iconName={IconList[weather]}
                 shadowStyle={styles.shadow}
               />
@@ -109,7 +111,7 @@ export default class App extends Component {
             <Text style={styles.temperature}>{temp}° C</Text>
             <Text style={styles.weatherType}>{Rabbit.uni2zg(weatherType)}</Text>
             <Text style={styles.date}>
-              {Rabbit.uni2zg(moment().locale("my").format("MMM.Do.Y"))}
+              {Rabbit.uni2zg(moment().locale('my').format('MMM.Do.Y'))}
             </Text>
           </View>
           <View style={styles.footer}>
@@ -146,23 +148,23 @@ const styles = StyleSheet.create({
     fontSize: 13
   },
   backgroundImage: {
-    width: "100%",
-    height: "100%"
+    width: '100%',
+    height: '100%'
   },
   header: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     flex: 1.7
   },
   weather: {
-    width: "40%",
-    height: "100%",
-    backgroundColor: "white",
+    width: '40%',
+    height: '100%',
+    backgroundColor: 'white',
     borderBottomRightRadius: 500,
-    overflow: "hidden"
+    overflow: 'hidden'
   },
   shadow: {
-    shadowColor: "black",
+    shadowColor: 'black',
     shadowOpacity: 0.3,
     shadowRadius: 3,
     shadowOffset: {
@@ -175,34 +177,34 @@ const styles = StyleSheet.create({
     }
   },
   weatherStatus: {
-    paddingLeft: "20%",
-    paddingTop: "18%"
+    paddingLeft: '20%',
+    paddingTop: '18%'
   },
   body: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     flex: 3,
     margin: 20
   },
   location: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 13,
     fontFamily: 'ZawgyiOne'
   },
   temperature: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 48,
-    fontWeight: "bold"
+    fontWeight: 'bold'
   },
   weatherType: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     fontFamily: 'ZawgyiOne',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 10
   },
   date: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 13,
     fontFamily: 'ZawgyiOne'
   },
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
     margin: 20
   },
   message: {
-    color: "#fff",
+    color: '#fff',
     marginTop: 10,
     padding: 5,
     fontSize: 18,
@@ -219,7 +221,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ZawgyiOne'
   },
   messageDetail: {
-    color: "#fff",
+    color: '#fff',
     padding: 5,
     fontSize: 13,
     fontFamily: 'ZawgyiOne'
