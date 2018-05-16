@@ -1,4 +1,6 @@
 # URWeather
+[![Maintainability](https://api.codeclimate.com/v1/badges/8e974823a0da760325a9/maintainability)](https://codeclimate.com/github/setkyar/URWeather/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/8e974823a0da760325a9/test_coverage)](https://codeclimate.com/github/setkyar/URWeather/test_coverage)
 
 ## Installation
 
