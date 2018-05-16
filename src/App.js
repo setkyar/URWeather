@@ -1,227 +1,138 @@
-import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  ImageBackground,
-  ActivityIndicator
-} from "react-native";
+import React, { Component } from 'react';
+import { Text, View, StatusBar, ImageBackground, ActivityIndicator } from 'react-native';
+
 import Rabbit from 'rabbit-node';
-import moment from "moment/min/moment-with-locales";
+import moment from 'moment/min/moment-with-locales';
 import SplashScreen from 'react-native-splash-screen';
 
-import fetchWeather from "./utils/weatherApi";
-import IconList, { WeatherStatusList } from "./utils/Helpers";
-import LinearGradientCurve from "./components/LinearGradientCurve";
+import Styles from './utils/Styles';
+import fetchWeather from './utils/weatherApi';
+import IconList, { WeatherStatusList } from './utils/Helpers';
+import LinearGradientCurve from './components/LinearGradientCurve';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      temp: 0,
-      weather: "Default",
+      weather: {
+        temp: 0,
+        status: 'Default',
+      },
       currentCity: null,
-      message: null
+      message: null,
     };
   }
 
   componentDidMount() {
     // this.loadPosition();
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       this.loadPosition();
     }
     SplashScreen.hide();
   }
-  
-  getCurrentPosition = (options) => new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  });
+
+  getCurrentPosition = options =>
+    new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
 
   getWeatherData = async (latitude, longitude) => {
     try {
       return await fetchWeather(latitude, longitude);
     } catch (error) {
-      console.log(error);
+      console.error(error); // eslint-disable-line no-console
     }
-  }
+    return false;
+  };
 
   loadPosition = async () => {
     try {
       const position = await this.getCurrentPosition();
-      console.log(position);
       const { latitude, longitude } = position.coords;
       const weatherData = await this.getWeatherData(latitude, longitude);
 
       this.setState({
-        temp: Math.round(weatherData.main.temp),
-        weather: weatherData.weather[0].main,
-        currentCity: weatherData.name
+        weather: {
+          temp: Math.round(weatherData.main.temp),
+          status: weatherData.weather[0].main,
+        },
+        currentCity: weatherData.name,
       });
     } catch (error) {
-      console.log(error);
       this.setState({
-        message: 'ယခု version သည် အင်တာနက်နှင့် Location ဖွင့်မှ Weather ကြည့်လို့ရမှာဖြစ်ပါသဖြင့် Internet နှင့် Location ဖွင့်ပြီးတစ်ခါပြန် Run ပေးပါ။',
+        message:
+          'ယခု version သည် အင်တာနက်နှင့် Location ဖွင့်မှ Weather ကြည့်လို့ရမှာဖြစ်ပါသဖြင့် Internet နှင့် Location ဖွင့်ပြီးတစ်ခါပြန် Run ပေးပါ။',
       });
-      console.log(error);
     }
   };
 
   render() {
-    const temp = this.state.temp;
-    const weather = this.state.weather;
+    const { temp, status } = this.state.weather;
 
-    if(weather === 'Default') {
-      return(
-        <View style={[styles.container, styles.horizontal, { backgroundColor: "#222" }]}>
+    if (status === 'Default') {
+      return (
+        <View style={[Styles.container, Styles.horizontal, { backgroundColor: '#222' }]}>
           <StatusBar hidden />
           <ActivityIndicator size="large" color="#b53ba4" />
-          <Text style={styles.errorMessage}>{this.state.message ? Rabbit.uni2zg(this.state.message) : null}</Text>
+          <Text style={Styles.errorMessage}>
+            {this.state.message ? Rabbit.uni2zg(this.state.message) : null}
+          </Text>
         </View>
-      )
+      );
     }
 
-    //Need to check every weather status
+    // Need to check every weather status
     const {
-      backgroundImage, gradientFirstColor, gradientSecondColor, weatherType, message, messageDetail
-    } = WeatherStatusList[weather];
+      backgroundImage,
+      gradientFirstColor,
+      gradientSecondColor,
+      weatherType,
+      message,
+      messageDetail,
+    } = WeatherStatusList[status];
 
     return (
-      <View style={[styles.container, { backgroundColor: "white" }]}>
+      <View style={[Styles.container, { backgroundColor: 'white' }]}>
         <StatusBar hidden />
-        <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-          <View style={styles.header}>
-            <View style={styles.weather}>
+        <ImageBackground source={backgroundImage} style={Styles.backgroundImage}>
+          <View style={Styles.header}>
+            <View style={Styles.weather}>
               <LinearGradientCurve
                 gradientFirstColor={gradientFirstColor}
                 gradientSecondColor={gradientSecondColor}
-                weatherStatusStyle={styles.weatherStatus}
+                weatherStatusStyle={1}
                 height="100%"
-                iconName={IconList[weather]}
-                shadowStyle={styles.shadow}
+                iconName={IconList[status]}
+                shadowStyle={1}
               />
             </View>
           </View>
-          <View style={styles.body}>
-            <Text style={styles.location}>
-            {this.state.currentCity ? Rabbit.uni2zg(this.state.currentCity) : ''}
+          <View style={Styles.body}>
+            <Text style={Styles.location}>
+              {this.state.currentCity ? Rabbit.uni2zg(this.state.currentCity) : ''}
             </Text>
-            <Text style={styles.temperature}>{temp}° C</Text>
-            <Text style={styles.weatherType}>{Rabbit.uni2zg(weatherType)}</Text>
-            <Text style={styles.date}>
-              {Rabbit.uni2zg(moment().locale("my").format("MMM.Do.Y"))}
+            <Text style={Styles.temperature}>{temp}° C</Text>
+            <Text style={Styles.weatherType}>{Rabbit.uni2zg(weatherType)}</Text>
+            <Text style={Styles.date}>
+              {Rabbit.uni2zg(moment()
+                  .locale('my')
+                  .format('MMM.Do.Y'))}
             </Text>
           </View>
-          <View style={styles.footer}>
+          <View style={Styles.footer}>
             <LinearGradientCurve
               gradientFirstColor={gradientFirstColor}
               gradientSecondColor={gradientSecondColor}
-              weatherStatusStyle={false}
+              weatherStatusStyle={0}
               height={8}
-              iconName={false}
-              shadowStyle={false}
+              iconName="0"
+              shadowStyle={0}
             />
-            <Text style={styles.message}>{Rabbit.uni2zg(message)}</Text>
-            <Text style={styles.messageDetail}>{Rabbit.uni2zg(messageDetail)}</Text>
+            <Text style={Styles.message}>{Rabbit.uni2zg(message)}</Text>
+            <Text style={Styles.messageDetail}>{Rabbit.uni2zg(messageDetail)}</Text>
           </View>
         </ImageBackground>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  horizontal: {
-    justifyContent: 'center',
-    flexDirection: 'column',
-    padding: 20
-  },
-  errorMessage: {
-    textAlign: 'center',
-    color: '#fff',
-    fontFamily: 'ZawgyiOne',
-    fontSize: 13
-  },
-  backgroundImage: {
-    width: "100%",
-    height: "100%"
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    flex: 1.7
-  },
-  weather: {
-    width: "40%",
-    height: "100%",
-    backgroundColor: "white",
-    borderBottomRightRadius: 500,
-    overflow: "hidden"
-  },
-  shadow: {
-    shadowColor: "black",
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOffset: {
-      width: 0,
-      height: 1 // Can't both be 0
-    }
-  },
-  weatherStatus: {
-    paddingLeft: "20%",
-    paddingTop: "18%"
-  },
-  body: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    flex: 3,
-    margin: 20
-  },
-  location: {
-    color: "#fff",
-    fontSize: 13,
-    fontFamily: 'ZawgyiOne'
-  },
-  temperature: {
-    color: "#fff",
-    fontSize: 48,
-    fontWeight: "bold"
-  },
-  weatherType: {
-    color: "#fff",
-    fontSize: 18,
-    fontFamily: 'ZawgyiOne',
-    fontWeight: "bold",
-    marginTop: 10
-  },
-  date: {
-    color: "#fff",
-    fontSize: 13,
-    fontFamily: 'ZawgyiOne'
-  },
-  footer: {
-    flex: 1.3,
-    margin: 20
-  },
-  message: {
-    color: "#fff",
-    marginTop: 10,
-    padding: 5,
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'ZawgyiOne'
-  },
-  messageDetail: {
-    color: "#fff",
-    padding: 5,
-    fontSize: 13,
-    fontFamily: 'ZawgyiOne'
-  }
-});
